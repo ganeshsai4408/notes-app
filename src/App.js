@@ -1,25 +1,57 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import Header from './components/Header';
+import NoteList from './components/NotesList';
+import Search from './components/Search';
+import { nanoid } from 'nanoid';
+import { format } from 'date-fns';
+import './style.css'
+const App = () =>{
+  
+  const [notes, setNotes] = useState([]);
+  const [searchText, setSearchText] = useState('')
+  const [darkMode , setDarkMode] = useState(false);
+  useEffect( ()=> {
+    const savedNotes = JSON.parse(
+      localStorage.getItem('react-notes-app-data'));
+      if(savedNotes){
+      setNotes(savedNotes);
+      }
+    },[])
+  useEffect( () =>{
+    if(notes.length > 0){
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      localStorage.setItem('react-notes-app-data',
+        JSON.stringify(notes)
+      );
+    }
+    }, [notes]);
+  const addNote =(text)=>{
+    const date = format(new Date(),'EEEE, dd MMMM yyyy');
+    const newNote = {
+      id: nanoid(),
+      text: text,
+      date: date,
+    };
+    const newNotes = [...notes, newNote];
+    setNotes(newNotes)
+  };
+  const deleteNote = (id)  =>{
+     const newNote = notes.filter((note)=>note.id !== id);
+     setNotes(newNote)
+  }
+  
+
+  return(
+  <div className={`${darkMode && 'dark-mode'}`}>
+    <div className='container'> 
+      <Header handleDarkmode={setDarkMode} />
+      <Search handleSearch={setSearchText}/>
+      <NoteList notes={notes.filter((note) =>
+          note.text.toLowerCase().includes(searchText)
+      )} handleAddNote={addNote} handleDeleteNote={deleteNote}/>
     </div>
-  );
+    </div>
+  )
 }
 
 export default App;
