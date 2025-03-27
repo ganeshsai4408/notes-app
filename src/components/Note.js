@@ -6,11 +6,8 @@ const Note = ({ id, text, date, handleDeleteNote }) => {
 			<span>{text}</span>
 			<div className='note-footer'>
 				<small>{date}</small>
-				<MdDeleteForever
-					onClick={() => handleDeleteNote(id)}
-					className='delete-icon'
-					size='1.3em'
-				/>
+				
+                <button onClick={() => handleDeleteNote(id)} className='save' size='1.3em'>DELETE</button>
 			</div>
 		</div>
 	);
