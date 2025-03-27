@@ -3,7 +3,7 @@ import Header from './components/Header';
 import NoteList from './components/NotesList';
 import Search from './components/Search';
 import { nanoid } from 'nanoid';
-import { format } from 'date-fns';
+
 import './style.css'
 const App = () =>{
   
@@ -26,11 +26,11 @@ const App = () =>{
     }
     }, [notes]);
   const addNote =(text)=>{
-    const date = format(new Date(),'EEEE, dd MMMM yyyy');
+    const date = new Date();
     const newNote = {
       id: nanoid(),
       text: text,
-      date: date,
+      date: date.toLocaleDateString(),
     };
     const newNotes = [...notes, newNote];
     setNotes(newNotes)
